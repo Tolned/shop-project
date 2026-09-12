@@ -1,16 +1,22 @@
-# Это пример Python скрипта.
-
-# Нажмите Shift+F10 для выполнения или замените его своим кодом.
-# Нажмите Двойное нажатие Shift для поиска везде: классы, файлы, окна инструментов, действия и настройки.
-
-
-def print_hi(name):
-    # Используйте точку останова в строке кода ниже для отладки скрипта.
-    print(f'Hi, {name}')  # Нажмите Ctrl+F8 для переключения точки останова.
+#!/usr/bin/env python
+"""Django's command-line utility for administrative tasks."""
+import os
+import sys
 
 
-# Нажмите зеленую кнопку на полях для запуска скрипта.
+def main():
+    """Run administrative tasks."""
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+    try:
+        from django.core.management import execute_from_command_line
+    except ImportError as exc:
+        raise ImportError(
+            "Couldn't import Django. Are you sure it's installed and "
+            "available on your PYTHONPATH environment variable? Did you "
+            "forget to activate a virtual environment?"
+        ) from exc
+    execute_from_command_line(sys.argv)
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# Справка PyCharm доступна на https://www.jetbrains.com/help/pycharm/
+    main()
