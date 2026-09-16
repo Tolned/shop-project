@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - Подробно{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+        <li class="breadcrumb-item active">{{ product.name }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-6">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" class="img-fluid rounded shadow" alt="{{ product.name }}">
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <!-- Чек-лист: Название, описание, цена и изображение присутствуют и отображаются -->
+        <h1>{{ product.name }}</h1>
+        <h2 class="text-success my-3">{{ product.price }} ₽</h2>
+        <hr>
+        <h5>Описание:</h5>
+        <p class="lead">{{ product.description|linebreaks }}</p>
+
+        <!-- Чек-лист: Реализованы переходы ... и обратно -->
+        <a href="{% url 'home' %}" class="btn btn-secondary mt-3">
+            &larr; Вернуться к списку
+        </a>
+    </div>
+</div>
+{% endblock %}

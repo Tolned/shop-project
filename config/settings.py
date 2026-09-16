@@ -2,14 +2,32 @@
 Настройки проекта Django.
 """
 import os
-from pathlib import Path  # Правильный импорт Path
-from dotenv import load_dotenv  # Для загрузки .env
+from pathlib import Path
+from dotenv import load_dotenv
 
 load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# ... другие настройки ...
 
+# ⬇️ БЕЗОПАСНОСТЬ ⬇️
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-me-in-production')
+DEBUG = os.getenv('DEBUG', default='True') == 'True'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+
+# ⬇️ ОСНОВНЫЕ НАСТРОЙКИ DJANGO ⬇️
+ROOT_URLCONF = 'config.urls'
+WSGI_APPLICATION = 'config.wsgi.application'
+
+# ⬇️ СТАТИЧЕСКИЕ ФАЙЛЫ ⬇️
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# ⬇️ МЕДИАФАЙЛЫ ⬇️
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# ⬇️ БАЗА ДАННЫХ ⬇️
 DATABASES = {
     'default': {
         'ENGINE': os.getenv('DB_ENGINE'),
@@ -21,6 +39,7 @@ DATABASES = {
     }
 }
 
+# ⬇️ ПРИЛОЖЕНИЯ ⬇️
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,11 +47,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Ваши приложения
     'catalog.apps.CatalogConfig',
 ]
 
+# ⬇️ MIDDLEWARE ⬇️
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -43,6 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# ⬇️ ШАБЛОНЫ ⬇️
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -59,6 +78,11 @@ TEMPLATES = [
     },
 ]
 
-# Медиафайлы
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# ⬇️ ИНТЕРНАЦИОНАЛИЗАЦИЯ ⬇️
+LANGUAGE_CODE = 'ru-ru'
+TIME_ZONE = 'Europe/Moscow'
+USE_I18N = True
+USE_TZ = True
+
+# ⬇️ АВТОИНКРЕМЕНТ ⬇️
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
