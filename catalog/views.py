@@ -1,24 +1,27 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
+from django.urls import reverse_lazy
 from .models import Product
 from .forms import ProductForm
 
-def home(request):
-    # Чек-лист: Использован лаконичный запрос
-    products = Product.objects.all()
-    return render(request, 'catalog/home.html', {'products': products})
 
-def product_detail(request, pk):
-    # Чек-лист: Контроллер получает pk, извлекает объект через ORM (защита от ошибок через get_object_or_404)
-    product = get_object_or_404(Product, pk=pk)
-    return render(request, 'catalog/product_detail.html', {'product': product})
+class HomeView(ListView):
+    model = Product
+    template_name = 'catalog/home.html'
+    context_object_name = 'products'
 
-def add_product(request):
-    # Чек-лист: Валидная форма, поля обязательны, защита от ошибок, сохранение в БД
-    if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        form = ProductForm()
-    return render(request, 'catalog/add_product.html', {'form': form})
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'product'
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'catalog/add_product.html'
+    success_url = reverse_lazy('home')
+
+
+class ContactsView(TemplateView):
+    template_name = 'catalog/contacts.html'

@@ -1,15 +1,16 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
-from catalog import views  # <-- Импортируем views из приложения catalog
+from catalog.views import HomeView, ProductDetailView, ProductCreateView, ContactsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
-    path('products/add/', views.add_product, name='add_product'),
-    path('products/<int:pk>/', views.product_detail, name='product_detail'), # Чек-лист: URL вида /products/<int:pk>/, нейминг product_detail
+    path('', HomeView.as_view(), name='home'),
+    path('products/add/', ProductCreateView.as_view(), name='add_product'),
+    path('products/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
+    path('contacts/', ContactsView.as_view(), name='contacts'),
+    path('blogs/', include('blog.urls')),  # ← подключить после создания blog
 ]
 
 if settings.DEBUG:
