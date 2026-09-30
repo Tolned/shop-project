@@ -19,7 +19,8 @@
                 <h5 class="card-title">{{ product.name }}</h5>
                 <p class="card-text flex-grow-1">{{ product.description|truncatechars:100 }}</p>
                 <h4 class="text-primary mt-2">{{ product.price }} ₽</h4>
-                <a href="{% url 'product_detail' product.pk %}" class="btn btn-outline-primary mt-auto">Подробнее</a>
+                <!-- ИСПРАВЛЕНО: добавлен префикс catalog: -->
+                <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-outline-primary mt-auto">Подробнее</a>
             </div>
         </div>
     </div>

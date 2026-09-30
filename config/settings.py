@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ⬇️ БЕЗОПАСНОСТЬ ⬇️
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-me-in-production')
 DEBUG = os.getenv('DEBUG', default='True') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost,127.0.0.product_detail.html').split(',')
 
 # ⬇️ ОСНОВНЫЕ НАСТРОЙКИ DJANGO ⬇️
 ROOT_URLCONF = 'config.urls'
