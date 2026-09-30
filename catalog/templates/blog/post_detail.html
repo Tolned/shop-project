@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'blog:post_list' %}">Блог</a></li>
+        <li class="breadcrumb-item active">{{ post.title }}</li>
+    </ol>
+</nav>
+{% if post.preview %}
+    <img src="{{ post.preview.url }}" class="img-fluid rounded mb-3">
+{% endif %}
+<h1>{{ post.title }}</h1>
+<p class="text-muted">👁 Просмотров: {{ post.views_count }} • {{ post.created_at|date:"d.m.Y H:i" }}</p>
+<hr>
+<div>{{ post.content|linebreaks }}</div>
+<div class="mt-4">
+    <a href="{% url 'blog:post_update' post.pk %}" class="btn btn-warning">Редактировать</a>
+    <a href="{% url 'blog:post_delete' post.pk %}" class="btn btn-danger">Удалить</a>
+    <a href="{% url 'blog:post_list' %}" class="btn btn-secondary">← К списку</a>
+</div>
+{% endblock %}
