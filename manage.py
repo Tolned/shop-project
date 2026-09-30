@@ -1,16 +1,36 @@
-# Это пример Python скрипта.
+"""
+Утилита командной строки Django для выполнения административных задач.
 
-# Нажмите Shift+F10 для выполнения или замените его своим кодом.
-# Нажмите Двойное нажатие Shift для поиска везде: классы, файлы, окна инструментов, действия и настройки.
+Этот файл является точкой входа для команд Django (manage.py).
+Он используется для запуска миграций, создания суперпользователя,
+запуска сервера разработки и других административных команд.
+"""
+import os
+import sys
 
 
-def print_hi(name):
-    # Используйте точку останова в строке кода ниже для отладки скрипта.
-    print(f'Hi, {name}')  # Нажмите Ctrl+F8 для переключения точки останова.
+def main() -> None:
+    """
+    Запускает административные задачи Django.
+
+    Устанавливает переменную окружения DJANGO_SETTINGS_MODULE,
+    которая указывает Django, где найти файл настроек проекта.
+    Затем выполняет команду, переданную через аргументы командной строки.
+
+    Raises:
+        ImportError: Если Django не установлен или недоступен в PYTHONPATH.
+    """
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+    try:
+        from django.core.management import execute_from_command_line
+    except ImportError as exc:
+        raise ImportError(
+            "Не удалось импортировать Django. Убедитесь, что Django установлен и "
+            "доступен в переменной окружения PYTHONPATH. Возможно, вы "
+            "забыли активировать виртуальное окружение?"
+        ) from exc
+    execute_from_command_line(sys.argv)
 
 
-# Нажмите зеленую кнопку на полях для запуска скрипта.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# Справка PyCharm доступна на https://www.jetbrains.com/help/pycharm/
+    main()
