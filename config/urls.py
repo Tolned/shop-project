@@ -12,6 +12,7 @@ urlpatterns = [
     path('contacts/', ContactsView.as_view(), name='contacts'),
     path('products/', include('catalog.urls')),
     path('blogs/', include('blog.urls')),
+    path('users/', include('users.urls')),  # ← добавьте эту строку
 ]
 
 if settings.DEBUG:
