@@ -76,7 +76,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
+                'django.contrib.auth.context_processors.auth',  # ← ВАЖНО!
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -91,3 +91,5 @@ USE_TZ = True
 
 # ⬇️ АВТОИНКРЕМЕНТ ⬇️
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+

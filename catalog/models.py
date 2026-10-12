@@ -1,84 +1,61 @@
+"""Модели приложения catalog."""
 from django.db import models
+from django.urls import reverse
+from django.conf import settings
 
 
 class Category(models.Model):
-    """Модель категории товаров."""
-
-    name = models.CharField(
-        max_length=200,
-        verbose_name="Название категории",
-        help_text="Введите название категории"
-    )
-    slug = models.SlugField(
-        max_length=200,
-        unique=True,
-        verbose_name="Слаг",
-        help_text="URL-идентификатор категории"
-    )
-    description = models.TextField(
-        blank=True,
-        verbose_name="Описание",
-        help_text="Описание категории (необязательно)"
-    )
+    """Категория продукта."""
+    name = models.CharField(max_length=100, verbose_name='Название')
+    description = models.TextField(blank=True, verbose_name='Описание')
 
     class Meta:
-        """Метаданные модели Category."""
-        verbose_name = "Категория"
-        verbose_name_plural = "Категории"
-        ordering = ["name"]
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
     def __str__(self):
-        """Возвращает строковое представление категории."""
         return self.name
 
 
 class Product(models.Model):
-    """Модель товара."""
-
-    name = models.CharField(
-        max_length=200,
-        verbose_name="Название товара",
-        help_text="Введите название товара"
-    )
+    """Продукт."""
+    name = models.CharField(max_length=200, verbose_name='Название')
+    description = models.TextField(blank=True, verbose_name='Описание')
+    image = models.ImageField(upload_to='catalog/%Y/%m/%d/', blank=True, verbose_name='Изображение')
     category = models.ForeignKey(
         Category,
+        on_delete=models.SET_NULL,
+        related_name='products',
+        blank=True,
+        null=True,
+        verbose_name='Категория'
+    )
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена')
+
+    # НОВОЕ: поле статуса публикации (Задание 1)
+    is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
+
+    # НОВОЕ: поле владельца (Задание 2)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="products",
-        verbose_name="Категория",
-        help_text="Выберите категорию товара"
-    )
-    price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        verbose_name="Цена",
-        help_text="Укажите цену товара"
-    )
-    description = models.TextField(
+        related_name='products',
+        null=True,
         blank=True,
-        verbose_name="Описание",
-        help_text="Описание товара (необязательно)"
-    )
-    image = models.ImageField(
-        upload_to="products/%Y/%m/%d/",
-        blank=True,
-        verbose_name="Изображение",
-        help_text="Загрузите изображение товара"
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Дата создания"
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name="Дата обновления"
+        verbose_name='Владелец'
     )
 
     class Meta:
-        """Метаданные модели Product."""
-        verbose_name = "Товар"
-        verbose_name_plural = "Товары"
-        ordering = ["-created_at"]
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукты'
+        ordering = ['name']
+        # Кастомное право can_unpublish_product
+        permissions = [
+            ('can_unpublish_product', 'Может отменять публикацию продукта'),
+        ]
 
     def __str__(self):
-        """Возвращает строковое представление товара."""
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('catalog:product_detail', kwargs={'pk': self.pk})

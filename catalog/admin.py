@@ -1,21 +1,28 @@
+"""Админка приложения catalog."""
 from django.contrib import admin
 from .models import Category, Product
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    """Админ-панель для модели Category."""
-
-    list_display: tuple[str, ...] = ('name', 'slug', 'description')
-    prepopulated_fields: dict[str, tuple[str, ...]] = {'slug': ('name',)}
-    search_fields: tuple[str, ...] = ('name',)
+    """Админка для категорий."""
+    list_display = ('id', 'name')
+    search_fields = ('name',)
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    """Админ-панель для модели Product."""
+    """Админка для продуктов."""
+    list_display = ('id', 'name', 'price', 'category', 'is_published', 'owner')
+    list_filter = ('is_published', 'category')
+    search_fields = ('name', 'description')
+    readonly_fields = ('owner',)
 
-    list_display: tuple[str, ...] = ('name', 'category', 'price', 'created_at')
-    list_filter: tuple[str, ...] = ('category', 'created_at')
-    search_fields: tuple[str, ...] = ('name', 'description')
-    readonly_fields: tuple[str, ...] = ('created_at', 'updated_at')
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'description', 'price', 'image', 'category'),
+        }),
+        ('Публикация и владелец', {
+            'fields': ('is_published', 'owner'),
+        }),
+    )
