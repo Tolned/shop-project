@@ -83,6 +83,21 @@ TEMPLATES = [
     },
 ]
 
+# ============================================================
+# Настройки Redis и кэширования
+# ============================================================
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'TIMEOUT': 300,  # TTL по умолчанию — 5 минут
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django.core.cache.backends.redis.RedisCacheClient',
+        }
+    }
+}
+
+
 # ⬇️ ИНТЕРНАЦИОНАЛИЗАЦИЯ ⬇️
 LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Europe/Moscow'
