@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная - Каталог{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Наши товары</h1>
+
+{% if user.is_authenticated %}
+    <a href="{% url 'catalog:product_create' %}" class="btn btn-success mb-3">Добавить товар</a>
+{% endif %}
+
+<div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+                <div class="card-img-top bg-secondary text-white text-center d-flex align-items-center justify-content-center" style="height: 200px;">
+                    Нет изображения
+                </div>
+            {% endif %}
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text flex-grow-1">{{ product.description|truncatechars:100 }}</p>
+                <h4 class="text-primary mt-2">{{ product.price }} ₽</h4>
+
+                {% if not product.is_published %}
+                    <span class="badge bg-warning text-dark mb-2">Не опубликовано</span>
+                {% endif %}
+
+                <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-outline-primary mt-auto">Подробнее</a>
+
+                <!-- Кнопки редактирования и удаления видны только владельцу или модератору -->
+                {% if user.is_authenticated %}
+                    {% if user == product.owner or perms.catalog.can_unpublish_product %}
+                        <div class="mt-2 d-flex gap-2">
+                            <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-sm btn-warning">Редактировать</a>
+                            {% if user == product.owner or perms.catalog.delete_product %}
+                                <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-sm btn-danger">Удалить</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p class="text-muted">Товары пока не добавлены.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
