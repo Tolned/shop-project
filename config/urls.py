@@ -1,14 +1,18 @@
+"""Маршруты проекта."""
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from catalog.views import HomeView, ContactsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Здесь будут URL вашего приложения
+    path('', HomeView.as_view(), name='home'),
+    path('contacts/', ContactsView.as_view(), name='contacts'),
+    path('products/', include('catalog.urls')),
+    path('blogs/', include('blog.urls')),
 ]
 
-# Добавляем обработку медиафайлов в режиме debug
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
