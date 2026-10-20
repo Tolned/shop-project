@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Публичная страница{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1 class="mb-4">Публичная страница</h1>
+        <div class="card">
+            <div class="card-body">
+                <p>Эта страница доступна всем, даже без авторизации.</p>
+                {% if user.is_authenticated %}
+                    <p>Вы авторизованы как <strong>{{ user.username }}</strong>.</p>
+                    <a href="{% url 'users:profile' %}" class="btn btn-primary">В профиль</a>
+                {% else %}
+                    <a href="{% url 'users:login' %}" class="btn btn-primary">Войти</a>
+                    <a href="{% url 'users:register' %}" class="btn btn-success">Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

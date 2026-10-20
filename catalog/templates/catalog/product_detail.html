@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <!-- ИСПРАВЛЕНО: список товаров находится на главной странице ('home') -->
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Продукты</a></li>
+        <li class="breadcrumb-item active">{{ product.name }}</li>
+    </ol>
+</nav>
+
+<div class="card shadow-sm">
+    {% if product.image %}
+        <img src="{{ product.image.url }}" class="card-img-top" style="max-height: 400px; object-fit: cover;">
+    {% endif %}
+    <div class="card-body">
+        <h1 class="card-title">{{ product.name }}</h1>
+        <p class="text-muted"><strong>Категория:</strong> {{ product.category }}</p>
+        <p class="text-muted"><strong>Цена:</strong> {{ product.price }} ₽</p>
+        <hr>
+        <p>{{ product.description|linebreaks }}</p>
+        <div class="mt-4">
+            <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning">Редактировать</a>
+            <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+            <!-- ИСПРАВЛЕНО: ссылка ведет на главную страницу -->
+            <a href="{% url 'home' %}" class="btn btn-secondary">← К списку</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
